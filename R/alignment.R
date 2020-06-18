@@ -116,7 +116,18 @@ star_align <- function(
   walk(command, ~system(., ignore.stdout = TRUE, ignore.stderr = TRUE))
 
   ## Index the bam files.
-  
+  if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
+
+  bam_files <- str_c(
+    outdir, 
+    zent_obj@sample_sheet[["sample_name"]],
+    "_Aligned.sortedByCoord.out.bam"
+  )
+
+  walk(bam_files, function(x) {
+    command <- str_c("samtools", "index", x, sep = " ")
+    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  })
 
   ## Add the outdir directory for alignment to the settings.
   new_setting <- data.table(parameter = "alignment_dir", value = outdir)
