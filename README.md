@@ -43,6 +43,8 @@ samples <- data.frame(
 Create the ZentTools object.
 
 ```
+library("ZentTools")
+
 zent <- zent_tools(
   analysis_type = "RNA-seq", sample_sheet = samples,
   paired = TRUE, ncores = 8
