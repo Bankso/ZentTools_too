@@ -62,6 +62,7 @@ star_genome <- function(
 #'
 #' @param zent_obj Zent object.
 #' @param outdir Output directory for aligned reads.
+#'   For use with '--outFileNamePrefix'.
 #'
 #' @export
 

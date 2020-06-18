@@ -9,7 +9,8 @@ star_align(zent_obj, outdir = getwd())
 \arguments{
 \item{zent_obj}{Zent object.}
 
-\item{outdir}{Output directory for aligned reads.}
+\item{outdir}{Output directory for aligned reads.
+For use with '--outFileNamePrefix'.}
 }
 \description{
 STAR Alignment
