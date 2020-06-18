@@ -124,13 +124,18 @@ star_align <- function(
     "_Aligned.sortedByCoord.out.bam"
   )
 
+  zent_obj@sample_sheet[["bam_files"]] <- bam_files
+
   walk(bam_files, function(x) {
     command <- str_c("samtools", "index", x, sep = " ")
     system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
   })
 
   ## Add the outdir directory for alignment to the settings.
-  new_setting <- data.table(parameter = "alignment_dir", value = outdir)
+  new_setting <- data.table(
+    parameter = c("alignment_dir", "genome_annotation"),
+    value = c(outdir, genome_annotation)
+  )
   settings <- copy(zent_obj@settings)
 
   settings <- rbindlist(list(settings, new_setting))

@@ -77,5 +77,8 @@ Align the reads using STAR.
 ```
 zent <- star_align(zent, outdir = "./aligned")
 ```
+Feature counting of the assigned reads.
 
-
+```
+zent <- count_features(zent, outdir = "./counts", strand_specific = 2)
+```
