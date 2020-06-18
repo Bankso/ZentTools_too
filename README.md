@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-Download a yeast genome assembly and annotation file.
+Download a yeast genome assembly and annotation file to a clean working directory.
 
 ```
 mkdir -p genome && cd genome
@@ -84,3 +84,15 @@ Feature counting of the assigned reads.
 ```
 zent <- count_features(zent, outdir = "./counts", strand_specific = 2)
 ```
+
+## Submitting to HPC.
+
+Put all of the R commands into a file with the '.R' extension, such as 'run_pipeline.R'.
+You can then run it with singularity via 'exec' after changing directory to your working directory.
+
+```
+singularity exec -eCB `pwd` -H `pwd` Rscript run_pipeline.R
+```
+If any directories you need to access are not in your working directory,
+You can replace the `pwd` in  `-eCB pwd` with a comma separated list of directories
+thta includes your working directory.
