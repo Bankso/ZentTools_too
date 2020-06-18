@@ -27,6 +27,12 @@ conda update -n ZentTools -y -c conda-forge -c bioconda --all
 
 conda clean -y --all
 
+## Configure sra-toolkit because they went insane.
+
+export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
+
+vdb-config --restore-defaults
+
 %environment
 
 export PATH=/opt/conda/envs/ZentTools/bin/:$PATH

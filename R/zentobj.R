@@ -1,6 +1,8 @@
 
 #' Zent Class
 #'
+#' @import data.table
+#'
 #' @slot sample_sheet Sample sheet.
 #' @slot settings Various run settings.
 #'
@@ -9,19 +11,18 @@
 setClass(
   "zent_obj",
   representation(
-    sample_sheet = "data.frame",
-    settings = "data.frame"
+    sample_sheet = "data.table",
+    settings = "data.table"
   ),
   prototype(
-    sample_sheet = data.frame(),
-    settings = data.frame()
+    sample_sheet = data.table(),
+    settings = data.table()
   )
 )
 
 #' Zent Object Constructor Function
 #'
 #' @import methods
-#' @import data.table
 #'
 #' @param sample_sheet Either a data.frame or delimited file.
 #' @param analysis_type Either 'RNA-seq' or 'ChIP-seq'.
@@ -62,6 +63,6 @@ zent_tools <- function(
     settings = run_settings
   )
 
-  return(zen_obj)
+  return(zent_obj)
 
 }

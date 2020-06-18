@@ -20,12 +20,12 @@ retrieve_reads <- function(
   accessions <- zent_obj@sample_sheet[["file_1"]]
 
   ## Prepare fasterq-dump command.
-  paired_status <- zent_obj@settings[parameter == "paired", value]
+  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
 
   command <- str_c(
     "fasterq-dump",
     "-O", outdir,
-    "-e", zent_obj@settings[parameter = "ncores", value],
+    "-e", zent_obj@settings[parameter == "ncores", value],
     sep = " "
   )
 

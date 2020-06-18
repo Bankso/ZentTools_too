@@ -1,0 +1,5 @@
+*.sif
+aligned/
+genome/
+counts/
+sequences/
