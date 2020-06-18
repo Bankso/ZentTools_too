@@ -15,7 +15,7 @@ fastqc <- function(
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 
   ## Get file names.
-  paired_status <- zent_obj@settings[parameter == "paired", value]
+  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
 
   samples <- str_c(zent_obj@sample_sheet[["file_1"]], collapse = " ")
 
@@ -29,7 +29,7 @@ fastqc <- function(
 
   ## Prepare the fastqc command.
   command <- str_c(
-    "fastq",
+    "fastqc",
     "-o", outdir,
     "-t", zent_obj@settings[parameter == "ncores", value],
     samples,

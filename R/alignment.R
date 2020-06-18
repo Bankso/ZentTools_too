@@ -44,10 +44,9 @@ star_genome <- function(
   system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
-  new_settings <- list(data.table(parameter = "genome_dir", value = outdir))
-
+  new_settings <- data.table(parameter = "genome_dir", value = outdir)
   settings <- copy(zent_obj@settings)
-  settings <- rbindlist(list(settings), new_settings)
+  settings <- rbindlist(list(settings, new_settings))
 
   zent_obj@settings <- settings
 
@@ -58,7 +57,7 @@ star_genome <- function(
 
 #' STAR Alignment
 #'
-#' @importFrom purrr iwalk map
+#' @importFrom purrr walk map imap
 #'
 #' @param zent_obj Zent object.
 #' @param outdir Output directory for aligned reads.
@@ -75,7 +74,7 @@ star_align <- function(
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 
   ## Get sample names.
-  paired_status <- zent_obj@settings[parameter == "paired", value]
+  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
 
   if (paired_status) {
     samples <- split(zent_obj@sample_sheet, by = "sample_name", keep.by = FALSE)
@@ -95,29 +94,35 @@ star_align <- function(
   ## prepare STAR alignment command.
   command <- str_c(
     "STAR",
-    "--runThreadN", zent_obj@settings[parameter == "ncols", value],
+    "--runThreadN", zent_obj@settings[parameter == "ncores", value],
     "--genomeDir", zent_obj@settings[parameter == "genome_dir", value],
-    "--outSAMtype", "BAM SortedByCoordinate"
+    "--outSAMtype", "BAM SortedByCoordinate",
+    sep = " "
   )
 
-  ## Run the command.
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
 
-  iwalk(samples, function(x, y) {
+  command <- imap(samples, function(x, y) {
     command <- str_c(
       command,
       "--outFileNamePrefix", str_c(outdir, str_c(y, "_")),
       "--readFilesIn", x,
       sep = " "
     )
-    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    return(command)
   })
 
-  ## Add the outdir directory for alignment to the settings.
-  new_setting <- list(data.table(parameter = "alignment_dir", value = outdir))
-  settings <- list(copy(zent_obj@settings))
+  ## Run the command.
+  walk(command, ~system(., ignore.stdout = TRUE, ignore.stderr = TRUE))
 
-  settings <- rbindlist(settings, new_setting)
+  ## Index the bam files.
+  
+
+  ## Add the outdir directory for alignment to the settings.
+  new_setting <- data.table(parameter = "alignment_dir", value = outdir)
+  settings <- copy(zent_obj@settings)
+
+  settings <- rbindlist(list(settings, new_setting))
   zent_obj@settings <- settings
 
   ## Return the zent object.
