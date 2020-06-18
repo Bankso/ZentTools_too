@@ -9,7 +9,7 @@ fastqc(zent_obj, outdir = getwd())
 \arguments{
 \item{zent_obj}{Zent object.}
 
-\item{outdir}{Output directory for reports.}
+\item{outdir}{Output directory for reports (-o).}
 }
 \description{
 Quality Control of Fastq Files

@@ -2,6 +2,7 @@
 
 export(fastqc)
 export(retrieve_reads)
+export(star_genome)
 export(zent_tools)
 exportClasses(zent_obj)
 import(data.table)

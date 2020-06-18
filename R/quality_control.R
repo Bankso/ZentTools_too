@@ -2,7 +2,7 @@
 #' Quality Control of Fastq Files
 #'
 #' @param zent_obj Zent object.
-#' @param outdir Output directory for reports.
+#' @param outdir Output directory for reports (-o).
 #'
 #' @export
 
@@ -10,6 +10,9 @@ fastqc <- function(
   zent_obj,
   outdir = getwd()
 ) {
+
+  ## Ensure the output directory exists.
+  if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 
   ## Get file names.
   paired_status <- zent_obj@settings[parameter == "paired", value]
