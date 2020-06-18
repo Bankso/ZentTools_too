@@ -44,7 +44,10 @@ star_genome <- function(
   system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
-  new_settings <- data.table(parameter = "genome_dir", value = outdir)
+  new_settings <- data.table(
+    parameter = c("genome_dir", "genome_annotation"),
+    value = c(outdir, genome_annotation)
+  )
   settings <- copy(zent_obj@settings)
   settings <- rbindlist(list(settings, new_settings))
 
@@ -133,8 +136,8 @@ star_align <- function(
 
   ## Add the outdir directory for alignment to the settings.
   new_setting <- data.table(
-    parameter = c("alignment_dir", "genome_annotation"),
-    value = c(outdir, genome_annotation)
+    parameter = "alignment_dir",
+    value = outdir
   )
   settings <- copy(zent_obj@settings)
 
