@@ -33,6 +33,13 @@ export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
 
 vdb-config --restore-defaults
 
+## Install ZentTools.
+
+apt-get -y update
+apt-get -y install build-essential
+
+R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools')"
+
 %environment
 
 export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
