@@ -17,7 +17,6 @@ conda update -n base -y -c defaults conda
 conda create -n ZentTools -c conda-forge -c bioconda \
 r-devtools r-tidyverse r-data.table \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
-bioconductor-rsamtools \
 fastqc star samtools sra-tools
 
 ## Update environment.
@@ -27,11 +26,6 @@ conda update -n ZentTools -y -c conda-forge -c bioconda --all
 ## Clean up extra files.
 
 conda clean -y --all
-
-## Install unixtools and cerebro
-
-apt-get -y update
-apt-get -y install build-essential
 
 %environment
 
