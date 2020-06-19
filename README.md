@@ -49,6 +49,8 @@ gunzip Saccharomyces_cerevisiae.R64-1-1.100.gtf.gz
 cd ..
 ```
 
+### Starting Singularity
+
 Once the assembly and annotation have been obtained, the singularity container can be downloaded,
   and the internal R version started.
 
@@ -56,6 +58,8 @@ Once the assembly and annotation have been obtained, the singularity container c
 singularity pull library://rpolicastro/default/zent_tools:rnaseq_v0.1
 singularity exec -eCB `pwd` -H `pwd` zent_tools_rnaseq_v0.1.sif R
 ```
+
+### Creating the ZentTools Object
 
 To help keep track of samples, the workflow requires a sample sheet.
 The sheet should have three columns: 'sample_name', 'file_1', and 'file_2'.
@@ -93,6 +97,8 @@ zent <- zent_tools(
 )
 ```
 
+### Download Reads from SRA
+
 Since we are using files from the SRA in the example,
   they need to be downloaded using sra-tools.
 This step can be skipped if not using files from the SRA.
@@ -100,6 +106,8 @@ This step can be skipped if not using files from the SRA.
 ```
 zent <- retrieve_reads(zent, outdir = "./sequences")
 ```
+
+### Fastq Quality Control
 
 For all sequencing runs, it is recommended to run a quality control
   analysis on the fastq files to check for any problems in
@@ -109,6 +117,8 @@ Quality control is done using the FastQC software.
 ```
 zent <- fastqc(zent, outdir = "./fastqc_reports")
 ```
+
+### Aligning Reads
 
 The STAR aligner remains the gold standard for spliced alignment,
   so is utilized in this pipeline.
@@ -128,6 +138,8 @@ Once the index is created, you are ready to align the reads to the genome using 
 ```
 zent <- star_align(zent, outdir = "./aligned")
 ```
+
+### Feature Counting
 
 Finally, after the reads are aligned, a feature count matrix can be calculated.
 The pipeline uses featureCounts from Rsubread to assign the aligned reads
@@ -163,7 +175,7 @@ cd ~/workdir
 singularity exec -eCB `pwd` -H `pwd` Rscript run_pipeline.R
 ```
 
-## Notes on directories
+## Notes on Directories
 
 If any directories you need to access are not in your working directory
   the singularity exec command must be slightly modified.
