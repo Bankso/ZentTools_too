@@ -55,8 +55,8 @@ Once the assembly and annotation have been obtained, the singularity container c
   and the internal R version started.
 
 ```
-singularity pull library://rpolicastro/default/zent_tools:rnaseq_v0.1
-singularity exec -eCB `pwd` -H `pwd` zent_tools_rnaseq_v0.1.sif R
+singularity pull library://rpolicastro/default/zent_tools:software_v0.1
+singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.1.sif R
 ```
 
 ### Creating the ZentTools Object
