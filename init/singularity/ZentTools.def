@@ -15,7 +15,7 @@ conda update -n base -y -c defaults conda
 ## Install required software.
 
 conda create -n ZentTools -c conda-forge -c bioconda \
-r-devtools r-tidyverse r-data.table \
+r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
 bioconductor-chipseeker \
 fastqc star samtools sra-tools=2.9.6 \
@@ -33,6 +33,8 @@ conda clean -y --all
 
 apt-get -y update
 apt-get -y install build-essential
+
+export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
 
 R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools')"
 

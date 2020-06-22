@@ -117,7 +117,7 @@ Before aligning the FASTQ files, a genome index must first be generated
   using the previously downloaded genome assembly and annotation files.
 
 ```
-zent <- star_genome(
+zent <- alignment_index(
   zent, outdir = "./genome/index",
   genome_assembly = "./genome/Saccharomyces_cerevisiae.R64-1-1.dna_sm.toplevel.fa",
   genome_annotation = "./genome/Saccharomyces_cerevisiae.R64-1-1.100.gtf"
@@ -127,7 +127,7 @@ zent <- star_genome(
 Once the index is created, you are ready to align the reads to the genome.
 
 ```
-zent <- star_align(zent, outdir = "./aligned")
+zent <- alignment(zent, outdir = "./aligned")
 ```
 
 ### Feature Counting

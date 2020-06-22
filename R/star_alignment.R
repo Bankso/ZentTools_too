@@ -1,15 +1,14 @@
-
 #' STAR Genome Generation
 #'
 #' @param zent_obj Zent object.
-#' @param outdir Output directory for STAR genome index (--genomeDir).
-#' @param genome_assembly Path to genome fasta file (--genomeFastaFiles).
-#' @param genome_annotation Path to genome gtf file (--sjdbGTFfile).
+#' @param outdir Output directory for STAR genome index.
+#' @param genome_assembly Path to genome fasta file.
+#' @param genome_annotation Path to genome gtf file.
 #' @param sa_bases Number of suffix array bases (--genomeSAindexNbases)
 #'
 #' @export
 
-star_genome <- function(
+star_index <- function(
   zent_obj,
   outdir = getwd(),
   genome_assembly,
