@@ -49,7 +49,7 @@ bowtie2_index <- function(
 
 #' Bowtie2 Alignment
 #'
-#' @importFrom purrr walk map imap
+#' @importFrom purrr pmap
 #'
 #' @param zent_obj Zent object.
 #' @param outdir Output directory for aligned reads.
