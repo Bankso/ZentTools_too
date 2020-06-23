@@ -18,7 +18,7 @@ conda create -n ZentTools -c conda-forge -c bioconda \
 r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
 bioconductor-chipseeker \
-fastqc star samtools sra-tools=2.9.6 \
+fastqc star samtools enabrowsertools \
 bowtie2 deeptools bedtools
 
 ## Update environment.

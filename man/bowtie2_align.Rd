@@ -9,7 +9,8 @@ bowtie2_align(
   outdir = getwd(),
   alignment_mode = "end-to-end",
   min_fragment = NA,
-  max_fragment = NA
+  max_fragment = NA,
+  max_memory = "1G"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ bowtie2_align(
 \item{min_fragment}{Minimum fragment length (paired end).}
 
 \item{max_fragment}{Maximum fragment length (paired end).}
+
+\item{max_memory}{Maximum memory per thread for samtools.}
 }
 \description{
 Bowtie2 Alignment
