@@ -168,6 +168,22 @@ bowtie2_align <- function(
     system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
   })
 
+  ## Add settings to zent object.
+  new_settings <- data.table(alignment_dir = outdir)
+  settings <- copy(zent_obj@settings)
+  settings <- rbindlist(list(settings, new_settings))
+  zent_obj@settings <- settings
+
+  ## Add bam files to sample_sheet.
+  sample_sheet <- copy(zent_obj@sample_sheet)
+  sample_sheet[
+    c("sample_bams", "control_bams") := list(
+      str_c(outdir, sample_name, ".bam"),
+      str_c(outdir, control_name, ".bam")
+    )
+  ]
+  zent_obj@sample_sheet <- sample_sheet
+
   ## Return the zent object.
   return(zent_obj)
 

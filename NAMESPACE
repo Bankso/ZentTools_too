@@ -2,8 +2,10 @@
 
 export(bowtie2_align)
 export(bowtie2_index)
+export(call_peaks)
 export(count_features)
 export(fastqc)
+export(make_bigwigs)
 export(retrieve_reads)
 export(star_align)
 export(star_index)
