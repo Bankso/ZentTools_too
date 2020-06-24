@@ -169,7 +169,10 @@ bowtie2_align <- function(
   })
 
   ## Add settings to zent object.
-  new_settings <- data.table(alignment_dir = outdir)
+  new_settings <- data.table(
+    parameter = alignment_dir,
+    value = outdir
+  )
   settings <- copy(zent_obj@settings)
   settings <- rbindlist(list(settings, new_settings))
   zent_obj@settings <- settings
