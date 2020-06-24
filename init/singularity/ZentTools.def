@@ -19,7 +19,7 @@ r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
 bioconductor-chipseeker \
 fastqc star samtools enabrowsertools \
-bowtie2 deeptools bedtools
+bowtie2 deeptools bedtools macs2
 
 ## Update environment.
 

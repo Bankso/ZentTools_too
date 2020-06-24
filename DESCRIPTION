@@ -17,6 +17,10 @@ Imports:
     stringr,
     data.table,
     purrr,
-    Rsubread
+    Rsubread,
+    ChIPseeker,
+    GenomicFeatures,
+    rtracklayer,
+    GenomicRanges
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
