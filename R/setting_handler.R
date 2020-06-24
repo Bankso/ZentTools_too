@@ -42,7 +42,7 @@ set_settings <- function(
   }
 
   if (!is.na(genome_dir)) {
-    settings[paremter == "genome_dir", value := genome_dir]
+    settings[parameter == "genome_dir", value := genome_dir]
   }
 
   if (!is.na(genome_annotation)) {

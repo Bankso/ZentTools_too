@@ -29,6 +29,9 @@ make_bigwigs <- function(
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
   paired_status <- as.logical(pull_setting(zent_obj, "paired"))
 
+  ## Make output directory if it doesn't exist.
+  if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+
   ## Get bams.
   samples <- split(
     zent_obj@sample_sheet[, .(sample_name, sample_bams)],
@@ -38,7 +41,7 @@ make_bigwigs <- function(
   samples <- map(samples, as.character)
 
   controls <- split(
-    zent_obj@sample_sheet[, .(control_name, control_bams)],
+    unique(zent_obj@sample_sheet[, .(control_name, control_bams)]),
     by = "control_name",
     keep.by = FALSE
   )

@@ -36,7 +36,7 @@ bowtie2_index <- function(
   ## Store the genome directory.
   zent_obj <- set_settings(
     zent_obj,
-    genome_dir = outdir,
+    genome_dir = str_c(outdir, index_name),
     genome_assembly = genome_assembly
   )
 
