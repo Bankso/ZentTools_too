@@ -52,8 +52,11 @@ zent_tools <- function(
 
   ## prepare run settings.
   run_settings <- data.table(
-     parameter = c("analysis_type", "paired", "ncores"),
-     value = c(analysis_type, paired, ncores)
+     parameter = c(
+       "analysis_type", "paired", "ncores", "genome_dir",
+       "genome_annotation", "genome_assembly", "alignment_dir"
+    ),
+     value = c(analysis_type, paired, ncores, rep("", 4))
   )
 
   ## Create the zent object.

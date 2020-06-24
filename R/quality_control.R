@@ -13,8 +13,8 @@ fastqc <- function(
 
   ## Ensure the output directory exists.
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
-  analysis_type <- zent_obj@settings[parameter == "analysis_type", value]
-  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
+  analysis_type <- pull_setting(zent_obj, "analysis_type")
+  paired_status <- as.logical(pull_setting(zent_obj, "paired"))
 
   ## Get file names.
   samples <- zent_obj@sample_sheet[["file_1"]]
@@ -35,7 +35,7 @@ fastqc <- function(
   command <- str_c(
     "fastqc",
     "-o", outdir,
-    "-t", zent_obj@settings[parameter == "ncores", value],
+    "-t", pull_setting(zent_obj, "ncores"),
     str_c(samples, collapse = " "),
     sep = " "
   )

@@ -27,7 +27,7 @@ make_bigwigs <- function(
 
   ## Input checks.
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
-  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
+  paired_status <- as.logical(pull_setting(zent_obj, "paired"))
 
   ## Get bams.
   samples <- split(
@@ -54,7 +54,7 @@ make_bigwigs <- function(
       "-o", str_c(outdir, y, ".bigwig"),
       "-of", "bigwig",
       "-bs", bin_size,
-      "-p", zent_obj@settings[parameter == "ncores", value],
+      "-p", pull_setting(zent_obj, "ncores"),
       sep = " "
     )
 

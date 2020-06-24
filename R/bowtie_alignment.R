@@ -25,7 +25,7 @@ bowtie2_index <- function(
   command <- str_c(
     "bowtie2-build",
     "-f", genome_assembly,
-    "--threads", zent_obj@settings[parameter == "ncores", value],
+    "--threads", pull_setting(zent_obj, "ncores"),
     str_c(outdir, index_name),
     sep = " "
   )
@@ -34,14 +34,11 @@ bowtie2_index <- function(
   system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
-  new_settings <- data.table(
-    parameter = c("genome_dir", "genome_assembly"),
-    value = c(str_c(outdir, index_name), genome_assembly)
+  zent_obj <- set_settings(
+    zent_obj,
+    genome_dir = outdir,
+    genome_assembly = genome_assembly
   )
-  settings <- copy(zent_obj@settings)
-  settings <- rbindlist(list(settings, new_settings))
-
-  zent_obj@settings <- settings
 
   ## Return the zent object.
   return(zent_obj)
@@ -72,7 +69,7 @@ bowtie2_align <- function(
 
   ## Input checks.
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
-  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
+  paired_status <- as.logical(pull_setting(zent_obj, "paired"))
 
   ## Create output directory if it exists.
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
@@ -113,11 +110,11 @@ bowtie2_align <- function(
   commands <- imap(samples, function(x, y) {
     command <- str_c(
       "bowtie2",
-      "-x", zent_obj@settings[parameter == "genome_dir", value],
+      "-x", pull_setting(zent_obj, "genome_dir"),
       "-S", str_c(outdir, y, ".sam"),
       "--phred33",
       "--no-unal",
-      "-p", zent_obj@settings[parameter == "ncores", value],
+      "-p", pull_setting(zent_obj, "ncores"),
       sep = " "
     )
 
@@ -152,7 +149,7 @@ bowtie2_align <- function(
     command <- str_c(
       "samtools", "sort",
       "-m", max_memory,
-      "-@", zent_obj@settings[parameter == "ncores", value],
+      "-@", pull_setting(zent_obj, "ncores"),
       "-o", str_c(outdir, str_c(x, ".bam")),
       "-O", "BAM",
       str_c(outdir, str_c(x, ".sam")),
@@ -169,23 +166,10 @@ bowtie2_align <- function(
   })
 
   ## Add settings to zent object.
-  new_settings <- data.table(
-    parameter = alignment_dir,
-    value = outdir
-  )
-  settings <- copy(zent_obj@settings)
-  settings <- rbindlist(list(settings, new_settings))
-  zent_obj@settings <- settings
+  zent_obj <- set_settings(zent_obj, alignment_dir = outdir)
 
   ## Add bam files to sample_sheet.
-  sample_sheet <- copy(zent_obj@sample_sheet)
-  sample_sheet[
-    c("sample_bams", "control_bams") := list(
-      str_c(outdir, sample_name, ".bam"),
-      str_c(outdir, control_name, ".bam")
-    )
-  ]
-  zent_obj@sample_sheet <- sample_sheet
+  zent_obj <- add_bams(zent_obj, alignment_dir = outdir)
 
   ## Return the zent object.
   return(zent_obj)

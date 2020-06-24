@@ -15,8 +15,8 @@ retrieve_reads <- function(
 ) {
 
   ## Input checks.
-  analysis_type <- zent_obj@settings[parameter == "analysis_type", value]
-  paired_status <- as.logical(zent_obj@settings[parameter == "paired", value])
+  analysis_type <- pull_setting(zent_obj, "analysis_type")
+  paired_status <- as.logical(pull_setting(zent_obj, "paired"))
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
 
   ## Make sure outdir exists.
