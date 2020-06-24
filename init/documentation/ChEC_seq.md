@@ -83,7 +83,7 @@ zent <- make_bigwigs(
 Call peaks.
 
 ```
-zent <- call_peaks(zent, outdir = "./peaks", genome_size = "12e8")
+zent <- call_peaks(zent, outdir = "./peaks", genome_size = "12e6")
 ```
 
 Annotate the peaks.
