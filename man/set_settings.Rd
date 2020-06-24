@@ -12,7 +12,8 @@ set_settings(
   genome_dir = NA,
   genome_annotation = NA,
   genome_assembly = NA,
-  alignment_dir = NA
+  alignment_dir = NA,
+  peak_dir = NA
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ the genome index GTF file.}
 the gnome assembly FASTA file.}
 
 \item{alignment_dir}{The directory containing the aligned reads.}
+
+\item{peak_dir}{The directory containing the called peaks.}
 }
 \description{
 Set Settings.

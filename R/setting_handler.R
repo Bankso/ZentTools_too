@@ -13,6 +13,7 @@
 #' @param genome_assembly The directory and file name of the
 #'   the gnome assembly FASTA file.
 #' @param alignment_dir The directory containing the aligned reads.
+#' @param peak_dir The directory containing the called peaks.
 #'
 #' @export
 
@@ -24,7 +25,8 @@ set_settings <- function(
   genome_dir = NA,
   genome_annotation = NA,
   genome_assembly = NA,
-  alignment_dir = NA
+  alignment_dir = NA,
+  peak_dir = NA
 ) {
 
   settings <- copy(zent_obj@settings)
@@ -55,6 +57,10 @@ set_settings <- function(
 
   if (!is.na(alignment_dir)) {
     settings[parameter == "alignment_dir", value := alignment_dir]
+  }
+
+  if (!is.na(peak_dir)) {
+    settings[parameter == "peak_dir", value := peak_dir]
   }
 
   zent_obj@settings <- settings

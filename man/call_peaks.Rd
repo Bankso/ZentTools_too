@@ -4,10 +4,28 @@
 \alias{call_peaks}
 \title{Peak Calling}
 \usage{
-call_peaks(zent_obj)
+call_peaks(
+  zent_obj,
+  outdir = getwd(),
+  genome_size,
+  qvalue_cutoff = 0.05,
+  broad_peaks = FALSE,
+  broad_qvalue_cutoff = 0.1
+)
 }
 \arguments{
 \item{zent_obj}{ZentTools object.}
+
+\item{outdir}{Output directory for peak files.}
+
+\item{genome_size}{Effective genome size.}
+
+\item{qvalue_cutoff}{q-value cutoff for peak calling.}
+
+\item{broad_peaks}{Whether the peaks are broad or not.}
+
+\item{broad_qvalue_cutoff}{If 'broad_peaks' is set,
+This controls the q-value cutoff of the broad peaks.}
 }
 \description{
 Peak Calling
