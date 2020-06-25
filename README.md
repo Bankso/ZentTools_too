@@ -161,7 +161,7 @@ cd ~/workdir
 # For Indiana HPC users, it would be 'module load singularity'.
 
 # Use the Singularity container to run your script.
-singularity exec -eCB `pwd` -H `pwd` Rscript run_pipeline.R
+singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.1.sif Rscript run_pipeline.R
 ```
 
 ## Notes on Directories
