@@ -63,6 +63,7 @@ call_peaks <- function(
   })
 
   ## Run the commands.
+  print_message("Calling peaks from the aligned reads.")
   walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Save the peak directory.
@@ -121,6 +122,7 @@ annotate_peaks <- function(
     peak = "integer"
   )
 
+  print_message("Annotating the called peaks.")
   iwalk(peak_files, function(x, y) {
     peaks <- import(x, format = "BED", extraCols = narrowpeak_cols)
 

@@ -31,6 +31,7 @@ bowtie2_index <- function(
   )
 
   ## Run the command.
+  print_message("Creating the Bowtie2 genome index.")
   system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
@@ -142,9 +143,11 @@ bowtie2_align <- function(
   })
 
   ## Run the commands.
+  print_message("Aligning the FASTQ reads to the genome using Bowtie2")
   walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Make coordinate sorted and indexed bams.
+  print_message("Coordinate sorting and indexing the BAMs")
   walk(names(samples), function(x) {
     command <- str_c(
       "samtools", "sort",

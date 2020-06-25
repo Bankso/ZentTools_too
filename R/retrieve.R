@@ -42,7 +42,8 @@ retrieve_reads <- function(
     str_c(command, x, sep = " ")
   })
 
-  ## Run the fasterq-dump command.
+  ## Run the enaDataGet command.
+  print_message("Retrieving the FASTQ files.")
   walk(command, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Update the sample sheet.
@@ -93,6 +94,7 @@ retrieve_reads <- function(
     }
   }
 
+  print_message("Unzipping the FASTQ files.")
   walk(sequences, function(x) {
     command <- str_c("gunzip", str_c(x, ".gz"), sep = " ")
     system(command, ignore.stdout = TRUE, ignore.stderr = TRUE) 

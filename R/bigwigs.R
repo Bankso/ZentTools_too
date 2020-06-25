@@ -90,6 +90,7 @@ make_bigwigs <- function(
   })
 
   ## Run commands.
+  print_message("Creating the BIGWIG coverage tracks.")
   walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Return zent tools object.

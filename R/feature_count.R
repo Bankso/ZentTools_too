@@ -48,6 +48,7 @@ count_features <- function(
   bam_files <- zent_obj@sample_sheet[["bam_files"]]  
 
   ## Run Rsubread featureCounts.
+  print_message("Feature counting from aligned reads.")
   counts <- featureCounts(
     files = bam_files,
     annot.ext = zent_obj@settings[parameter == "genome_annotation", value],
