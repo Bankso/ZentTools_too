@@ -37,6 +37,8 @@ samples <- data.frame(
 Make the ZentTools object.
 
 ```
+library("ZentTools")
+
 zent <- zent_tools(
   analysis_type = "ChEC-seq", sample_sheet = samples,
   paired = TRUE, ncores = 8
