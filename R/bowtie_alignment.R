@@ -108,9 +108,10 @@ bowtie2_align <- function(
   samples <- c(samples, controls)
 
   ## Prepare bowtie2 alignment command.
-  commands <- imap(samples, function(x, y) {
+  
+  print_message("Aligning the FASTQ reads to the genome using Bowtie2")
+  iwalk(samples, function(x, y) {
     command <- str_c(
-      "bowtie2",
       "-x", pull_setting(zent_obj, "genome_dir"),
       "-S", str_c(outdir, y, ".sam"),
       "--phred33",
@@ -139,21 +140,21 @@ bowtie2_align <- function(
       command <- str_c(command, "-U", x, sep = " ")
     }
 
-    return(command)
+    system2(
+      "bowtie2",
+      args = command,
+      stderr = str_c(outdir, y, "_log.txt")
+    )
   })
-
-  ## Run the commands.
-  print_message("Aligning the FASTQ reads to the genome using Bowtie2")
-  walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Make coordinate sorted and indexed bams.
   print_message("Coordinate sorting and indexing the BAMs")
   walk(names(samples), function(x) {
-    command <- str_c(
+    command <- c(
       "samtools", "sort",
       "-m", max_memory,
       "-@", pull_setting(zent_obj, "ncores"),
-      "-o", str_c(outdir, str_c(x, ".bam")),
+      "-o", outdir, str_c(x, ".bam"),
       "-O", "BAM",
       str_c(outdir, str_c(x, ".sam")),
       sep = " "
