@@ -10,6 +10,7 @@
 #' @param min_fragment Minimum fragment length.
 #' @param max_fragment Maximum fragment length.
 #' @param extend_reads Distance to extend single-end reads.
+#'   Set to NA to not extend reads.
 #'
 #' @export
 
@@ -80,9 +81,9 @@ make_bigwigs <- function(
       command <- str_c(command, "--maxFragmentLength", max_fragment, sep = " ")
     }
 
-    if (paired_status) {
+    if (!is.na(extend_reads) && paired_status) {
       command <- str_c(command, "-e", sep = " ")
-    } else if (!paired_status && !is.na(extend_reads)) {
+    } else if (!is.na(extend_reads) && !paired_status)) {
       command <- str_c(command, "-e", extend_reads, sep = " ")
     }
 
