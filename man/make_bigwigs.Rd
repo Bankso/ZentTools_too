@@ -33,7 +33,8 @@ make_bigwigs(
 
 \item{max_fragment}{Maximum fragment length.}
 
-\item{extend_reads}{Distance to extend single-end reads.}
+\item{extend_reads}{Distance to extend single-end reads.
+Set to NA to not extend reads.}
 }
 \description{
 Generate Bigwigs

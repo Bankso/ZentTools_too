@@ -83,7 +83,7 @@ make_bigwigs <- function(
 
     if (!is.na(extend_reads) && paired_status) {
       command <- str_c(command, "-e", sep = " ")
-    } else if (!is.na(extend_reads) && !paired_status)) {
+    } else if (!is.na(extend_reads) && !paired_status) {
       command <- str_c(command, "-e", extend_reads, sep = " ")
     }
 
