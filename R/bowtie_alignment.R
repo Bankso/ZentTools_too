@@ -83,12 +83,18 @@ bowtie2_align <- function(
     )
     samples <- map(samples, as.character)
 
-    controls <- split(
-      unique(zent_obj@sample_sheet[, .(control_name, control_file_1, control_file_2)]),
-      by = "control_name",
-      keep.by = FALSE
-    )
-    controls <- map(controls, as.character)
+    if (any(!is.na(zent_obj@sample_sheet[["control_file_1"]]))) {
+      controls <- split(
+        unique(zent_obj@sample_sheet[
+          !is.na(control_file_1),
+          .(control_name, control_file_1, control_file_2)
+        ]),
+        by = "control_name",
+        keep.by = FALSE
+      )
+      controls <- map(controls, as.character)
+      samples <- c(samples, controls)
+    }
   } else {
     samples <- split(
       zent_obj@sample_sheet[, .(sample_name, file_1)],
@@ -97,15 +103,19 @@ bowtie2_align <- function(
     )
     samples <- map(samples, as.character)
 
-    controls <- split(
-      unique(zent_obj@sample_sheet[, .(control_name, control_file_1)]),
-      by = "control_name",
-      keep.by = FALSE
-    )
-    controls <- map(controls, as.character)
+    if (any(!is.na(zent_obj@sample_sheet[["control_file_1"]]))) {
+      controls <- split(
+        unique(zent_obj@sample_sheet[
+          !is.na(control_file_1),
+          .(control_name, control_file_1)
+        ]),
+        by = "control_name",
+        keep.by = FALSE
+      )
+      controls <- map(controls, as.character)
+      samples <- c(samples, controls)
+    }
   }
-
-  samples <- c(samples, controls)
 
   ## Prepare bowtie2 alignment command.
   
@@ -150,11 +160,11 @@ bowtie2_align <- function(
   ## Make coordinate sorted and indexed bams.
   print_message("Coordinate sorting and indexing the BAMs")
   walk(names(samples), function(x) {
-    command <- c(
+    command <- str_c(
       "samtools", "sort",
       "-m", max_memory,
       "-@", pull_setting(zent_obj, "ncores"),
-      "-o", outdir, str_c(x, ".bam"),
+      "-o", str_c(outdir, str_c(x, ".bam")),
       "-O", "BAM",
       str_c(outdir, str_c(x, ".sam")),
       sep = " "

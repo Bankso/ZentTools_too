@@ -36,13 +36,19 @@ call_peaks <- function(
     command <- str_c(
       "macs2", "callpeak",
       "-t", args$sample_bams,
-      "-c", args$control_bams,
       "-n", args$sample_name,
       "--outdir", outdir,
       "-g", genome_size,
       "-q", qvalue_cutoff,
       sep = " "
     )
+
+    if (!is.na(args$control_bams)) {
+      command <- str_c(
+        command, "-c", args$control_bams,
+        sep = " "
+      )
+    }
 
     if (broad_peaks) {
       command <- str_c(

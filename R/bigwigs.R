@@ -41,12 +41,18 @@ make_bigwigs <- function(
   )
   samples <- map(samples, as.character)
 
-  controls <- split(
-    unique(zent_obj@sample_sheet[, .(control_name, control_bams)]),
-    by = "control_name",
-    keep.by = FALSE
-  )
-  controls <- map(controls, as.character)
+  if(any(!is.na(zent_obj@sample_sheet[["control_bams"]]))) {
+    controls <- split(
+      unique(zent_obj@sample_sheet[
+        !is.na(control_bams),
+        .(control_name, control_bams)
+      ]),
+      by = "control_name",
+      keep.by = FALSE
+    )
+    controls <- map(controls, as.character)
+    samples <- c(samples, controls)
+  }
 
   samples <- c(samples, controls)
 
@@ -92,7 +98,7 @@ make_bigwigs <- function(
 
   ## Run commands.
   print_message("Creating the BIGWIG coverage tracks.")
-  walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  walk(commands, system)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Return zent tools object.
   return(zent_obj)
