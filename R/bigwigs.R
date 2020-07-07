@@ -54,8 +54,6 @@ make_bigwigs <- function(
     samples <- c(samples, controls)
   }
 
-  samples <- c(samples, controls)
-
   ## Prepare command.
   commands <- imap(samples, function(x, y) {
     command <- str_c(
