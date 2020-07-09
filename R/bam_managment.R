@@ -26,10 +26,13 @@ add_bams <- function(
       "_Aligned.sortedByCoord.out.bam"
     )]
   } else if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
-    sample_sheet[, c("sample_bams", "control_bams") := list(
-      str_c(alignment_dir, sample_name, ".bam"),
-      str_c(alignment_dir, control_name, ".bam")
-    )]
+    sample_sheet[,
+      sample_bams := str_c(alignment_dir, sample_name, ".bam")
+    ]
+    sample_sheet[
+      !is.na(control_file_1),
+      control_bams := str_c(alignment_dir, control_name, ".bam")
+    ]
   }
 
   ## Add new sample sheet back to zent object.

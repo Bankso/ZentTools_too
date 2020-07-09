@@ -10,6 +10,7 @@
 #' @param min_fragment Minimum fragment length.
 #' @param max_fragment Maximum fragment length.
 #' @param extend_reads Distance to extend single-end reads.
+#'   Set to NA to not extend reads.
 #'
 #' @export
 
@@ -40,14 +41,18 @@ make_bigwigs <- function(
   )
   samples <- map(samples, as.character)
 
-  controls <- split(
-    unique(zent_obj@sample_sheet[, .(control_name, control_bams)]),
-    by = "control_name",
-    keep.by = FALSE
-  )
-  controls <- map(controls, as.character)
-
-  samples <- c(samples, controls)
+  if(any(!is.na(zent_obj@sample_sheet[["control_bams"]]))) {
+    controls <- split(
+      unique(zent_obj@sample_sheet[
+        !is.na(control_bams),
+        .(control_name, control_bams)
+      ]),
+      by = "control_name",
+      keep.by = FALSE
+    )
+    controls <- map(controls, as.character)
+    samples <- c(samples, controls)
+  }
 
   ## Prepare command.
   commands <- imap(samples, function(x, y) {
@@ -80,9 +85,9 @@ make_bigwigs <- function(
       command <- str_c(command, "--maxFragmentLength", max_fragment, sep = " ")
     }
 
-    if (paired_status) {
+    if (!is.na(extend_reads) && paired_status) {
       command <- str_c(command, "-e", sep = " ")
-    } else if (!paired_status && !is.na(extend_reads)) {
+    } else if (!is.na(extend_reads) && !paired_status) {
       command <- str_c(command, "-e", extend_reads, sep = " ")
     }
 
@@ -90,7 +95,8 @@ make_bigwigs <- function(
   })
 
   ## Run commands.
-  walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  print_message("Creating the BIGWIG coverage tracks.")
+  walk(commands, system)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Return zent tools object.
   return(zent_obj)

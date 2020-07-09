@@ -23,6 +23,7 @@ setClass(
 #' Zent Object Constructor Function
 #'
 #' @import methods
+#' @import data.table
 #'
 #' @param sample_sheet Either a data.frame or delimited file.
 #' @param analysis_type Either 'RNA-seq' or 'ChIP-seq'.
@@ -49,6 +50,18 @@ zent_tools <- function(
   } else if (is(sample_sheet, "data.frame")) {
     samples <- as.data.table(sample_sheet)
   }
+
+  samples[is.na(samples)] <- NA_character_
+
+  samples[
+    !is.na(control_name),
+    c("control_file_1", "control_file_2", "control_name") := list(
+      ifelse(str_detect(control_file_1, "(^$|^NA$)"), NA_character_, control_file_1),
+      ifelse(str_detect(control_file_2, "(^$|^NA$)"), NA_character_, control_file_2),
+      ifelse(str_detect(control_name, "(^$|^NA$)"), NA_character_, control_name)
+    )
+  ]
+    
 
   ## prepare run settings.
   run_settings <- data.table(

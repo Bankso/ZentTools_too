@@ -36,13 +36,19 @@ call_peaks <- function(
     command <- str_c(
       "macs2", "callpeak",
       "-t", args$sample_bams,
-      "-c", args$control_bams,
       "-n", args$sample_name,
       "--outdir", outdir,
       "-g", genome_size,
       "-q", qvalue_cutoff,
       sep = " "
     )
+
+    if (!is.na(args$control_bams)) {
+      command <- str_c(
+        command, "-c", args$control_bams,
+        sep = " "
+      )
+    }
 
     if (broad_peaks) {
       command <- str_c(
@@ -63,6 +69,7 @@ call_peaks <- function(
   })
 
   ## Run the commands.
+  print_message("Calling peaks from the aligned reads.")
   walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Save the peak directory.
@@ -121,6 +128,7 @@ annotate_peaks <- function(
     peak = "integer"
   )
 
+  print_message("Annotating the called peaks.")
   iwalk(peak_files, function(x, y) {
     peaks <- import(x, format = "BED", extraCols = narrowpeak_cols)
 

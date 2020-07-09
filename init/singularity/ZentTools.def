@@ -36,7 +36,7 @@ apt-get -y install build-essential
 
 export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
 
-R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools',ref='chip')"
+R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools',ref='dev')"
 
 %environment
 

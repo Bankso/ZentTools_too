@@ -27,7 +27,10 @@ retrieve_reads <- function(
 
   if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
     controls <- unique(zent_obj@sample_sheet[["control_file_1"]])
-    accessions <- c(accessions, controls)
+    if (any(!is.na(controls))) {
+      controls <- controls[!is.na(controls)]
+      accessions <- c(accessions, controls)
+    }
   }
 
   ## Prepare command to get data from ENA.
@@ -42,7 +45,8 @@ retrieve_reads <- function(
     str_c(command, x, sep = " ")
   })
 
-  ## Run the fasterq-dump command.
+  ## Run the enaDataGet command.
+  print_message("Retrieving the FASTQ files.")
   walk(command, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Update the sample sheet.
@@ -55,16 +59,20 @@ retrieve_reads <- function(
     )]
 
     if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
-      sample_sheet[, c("control_file_1", "control_file_2") := list(
-        str_c(outdir, control_file_1, "/", control_file_1, "_1.fastq"),
-        str_c(outdir, control_file_1, "/", control_file_1, "_2.fastq")
-      )]
+      sample_sheet[
+        !is.na(control_file_1),
+        c("control_file_1", "control_file_2") := list(
+          str_c(outdir, control_file_1, "/", control_file_1, "_1.fastq"),
+          str_c(outdir, control_file_1, "/", control_file_1, "_2.fastq")
+        )
+      ]
     }
   } else {
     sample_sheet[, file_1 := str_c(outdir, file_1, "/", file_1, ".fastq")]
 
     if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
-      sample_sheet[,
+      sample_sheet[
+        !is.na(control_file_1),
         control_file_1 := str_c(outdir, control_file_1, "/", control_file_1, ".fastq")
       ]
     }
@@ -79,20 +87,25 @@ retrieve_reads <- function(
     sequences <- c(sequences, zent_obj@sample_sheet[["file_2"]])
   }
 
-  if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
-    sequences <- c(
-      sequences,
-      unique(zent_obj@sample_sheet[["control_file_1"]])
-    )
+  if (
+    analysis_type %in% c("ChIP-seq", "ChEC-seq") &&
+    any(!is.na(zent_obj@sample_sheet[["control_file_1"]]))
+  ) {
+
+    controls_1 <- unique(zent_obj@sample_sheet[["control_file_1"]])
+    controls_1 <- controls_1[!is.na(controls_1)]
+ 
+    sequences <- c(sequences, controls_1)
 
     if (paired_status) {
-      sequences <- c(
-        sequences,
-        unique(zent_obj@sample_sheet[["control_file_2"]])
-      )
+      controls_2 <- unique(unique(zent_obj@sample_sheet[["control_file_2"]]))
+      controls_2 <- controls_2[!is.na(controls_2)]
+
+      sequences <- c(sequences, controls_2)
     }
   }
 
+  print_message("Unzipping the FASTQ files.")
   walk(sequences, function(x) {
     command <- str_c("gunzip", str_c(x, ".gz"), sep = " ")
     system(command, ignore.stdout = TRUE, ignore.stderr = TRUE) 

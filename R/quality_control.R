@@ -23,11 +23,20 @@ fastqc <- function(
     samples <- c(samples, zent_obj@sample_sheet[["file_2"]])
   }
 
-  if (analysis_type %in% c("ChEC-seq", "ChIP-seq")) {
-    samples <- c(samples, unique(zent_obj@sample_sheet[["control_file_1"]]))
+  if (
+    analysis_type %in% c("ChEC-seq", "ChIP-seq") &&
+    any(!is.na(unique(zent_obj@sample_sheet[["control_file_1"]])))
+  ) {
+    controls_1 <- unique(zent_obj@sample_sheet[["control_file_1"]])
+    controls_1 <- controls_1[!is.na(controls_1)]
+
+    samples <- c(samples, controls_1)
 
     if (paired_status) {
-      samples <- c(samples, unique(zent_obj@sample_sheet[["control_file_2"]]))
+      controls_2 <- unique(zent_obj@sample_sheet[["control_file_2"]])
+      controls_2 <- controls_2[!is.na(controls_2)]
+
+      samples <- c(samples, controls_2)
     }
   }
 
@@ -41,6 +50,7 @@ fastqc <- function(
   )
 
   ## Run the fastqc command.
+  print_message("Running FASTQ quality control.")
   system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Return the zent object.
