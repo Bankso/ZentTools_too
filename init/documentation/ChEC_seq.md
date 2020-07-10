@@ -17,8 +17,8 @@ cd ..
 Start singularity.
 
 ```
-singularity pull library://rpolicastro/default/zent_tools:software_v0.1
-singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.1.sif R
+singularity pull --arch amd64 library://zentlab/default/zent_tools:software_v0.2
+singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.2.sif R
 ```
 
 Create a sample sheet.
