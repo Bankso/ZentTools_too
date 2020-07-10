@@ -14,7 +14,7 @@ conda update -n base -y -c defaults conda
 
 ## Install required software.
 
-conda create -n ZentTools -c conda-forge -c bioconda \
+conda create -n ZentTools -y -c conda-forge -c bioconda \
 r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
 bioconductor-chipseeker \
