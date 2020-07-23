@@ -70,12 +70,12 @@ make_bigwigs <- function(
       sep = " "
     )
 
-    if (is.na(scale_factor) && !is.na(normalize_using)) {
+    if (all(is.na(scale_factors)) && !is.na(normalize_using)) {
       command <- str_c(command, "--normalizeUsing", normalize_using, sep = " ")
     }
 
     if (all(!is.na(scale_factors))) {
-      command <- str_c(command, str_c("--scaleFactor", scale_factor[y], sep = " "), sep = " ")
+      command <- str_c(command, str_c("--scaleFactor", scale_factors[y], sep = " "), sep = " ")
     }
 
     if (!is.na(genome_size)) {
