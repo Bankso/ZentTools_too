@@ -11,6 +11,9 @@
 #' @param max_fragment Maximum fragment length.
 #' @param extend_reads Distance to extend single-end reads.
 #'   Set to NA to not extend reads.
+#' @param scale_factors Takes a named vector, with the name being the sample name,
+#'   and the value being the scale factor.
+#'   If set will override 'normalzie_using' option.
 #'
 #' @export
 
@@ -23,7 +26,8 @@ make_bigwigs <- function(
   skip_non_covered = TRUE,
   min_fragment = NA,
   max_fragment = NA,
-  extend_reads = 200
+  extend_reads = 200,
+  scale_factors = NA
 ) {
 
   ## Input checks.
@@ -66,8 +70,12 @@ make_bigwigs <- function(
       sep = " "
     )
 
-    if (!is.na(normalize_using)) {
+    if (is.na(scale_factor) && !is.na(normalize_using)) {
       command <- str_c(command, "--normalizeUsing", normalize_using, sep = " ")
+    }
+
+    if (all(!is.na(scale_factors))) {
+      command <- str_c(command, str_c("--scaleFactor", scale_factor[y], sep = " "), sep = " ")
     }
 
     if (!is.na(genome_size)) {

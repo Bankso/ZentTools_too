@@ -13,7 +13,8 @@ make_bigwigs(
   skip_non_covered = TRUE,
   min_fragment = NA,
   max_fragment = NA,
-  extend_reads = 200
+  extend_reads = 200,
+  scale_factors = NA
 )
 }
 \arguments{
@@ -35,6 +36,10 @@ make_bigwigs(
 
 \item{extend_reads}{Distance to extend single-end reads.
 Set to NA to not extend reads.}
+
+\item{scale_factors}{Takes a named vector, with the name being the sample name,
+and the value being the scale factor.
+If set will override 'normalzie_using' option.}
 }
 \description{
 Generate Bigwigs
