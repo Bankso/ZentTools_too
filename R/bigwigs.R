@@ -14,6 +14,11 @@
 #' @param scale_factors Takes a named vector, with the name being the sample name,
 #'   and the value being the scale factor.
 #'   If set will override 'normalzie_using' option.
+#' @param split_strands For RNA-seq, whether to split the strands into
+#'   positive and minus strand files.
+#' @param library_type If split_strands is TRUE, specify library chemistry
+#'   as either 'dUTP' or 'ligation'.
+#'   
 #'
 #' @export
 
@@ -27,35 +32,47 @@ make_bigwigs <- function(
   min_fragment = NA,
   max_fragment = NA,
   extend_reads = 200,
-  scale_factors = NA
+  scale_factors = NA,
+  split_strands = FALSE,
+  library_type = NA
 ) {
 
   ## Input checks.
   if (!str_detect(outdir, "/$")) outdir <- str_c(outdir, "/")
   paired_status <- as.logical(pull_setting(zent_obj, "paired"))
+  analysis_type <- pull_setting(zent_obj, "analysis_type")
 
   ## Make output directory if it doesn't exist.
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 
   ## Get bams.
-  samples <- split(
-    zent_obj@sample_sheet[, .(sample_name, sample_bams)],
-    by = "sample_name",
-    keep.by = FALSE
-  )
-  samples <- map(samples, as.character)
-
-  if(any(!is.na(zent_obj@sample_sheet[["control_bams"]]))) {
-    controls <- split(
-      unique(zent_obj@sample_sheet[
-        !is.na(control_bams),
-        .(control_name, control_bams)
-      ]),
-      by = "control_name",
+  if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
+    samples <- split(
+      zent_obj@sample_sheet[, .(sample_name, sample_bams)],
+      by = "sample_name",
       keep.by = FALSE
     )
-    controls <- map(controls, as.character)
-    samples <- c(samples, controls)
+    samples <- map(samples, as.character)
+
+    if(any(!is.na(zent_obj@sample_sheet[["control_bams"]]))) {
+      controls <- split(
+        unique(zent_obj@sample_sheet[
+          !is.na(control_bams),
+          .(control_name, control_bams)
+        ]),
+        by = "control_name",
+        keep.by = FALSE
+      )
+      controls <- map(controls, as.character)
+      samples <- c(samples, controls)
+    }
+  } else {
+    samples <- split(
+      zent_obj@sample_sheet[, .(sample_name, bam_files)],
+      by = "sample_name",
+      keep.by = FALSE
+    )
+    samples <- map(samples, as.character)
   }
 
   ## Prepare command.
@@ -63,7 +80,6 @@ make_bigwigs <- function(
     command <- str_c(
       "bamCoverage",
       "-b", x,
-      "-o", str_c(outdir, y, ".bigwig"),
       "-of", "bigwig",
       "-bs", bin_size,
       "-p", pull_setting(zent_obj, "ncores"),
@@ -101,6 +117,33 @@ make_bigwigs <- function(
 
     return(command)
   })
+
+  ## Split strands if requested for RNA-seq.
+  if (split_strands) {
+    forward <- imap(command, function(x, y) {
+      forward_file <- str_c(y, ifelse(library_type == "dUTP", "_positive.bigwig", "_minus.bigwig"))
+      forward <- str_c(
+        x, "-o", str_c(outdir, forward_file),
+        "--filterRNAstrand", "forward"
+      )
+      return(forward)
+    })
+    names(forward) <- str_c(names(forward), "_forward")
+
+    reverse <- imap(command, function(x, y) {
+      reverse_file <- str_c(y, ifelse(library_type == "dUTP", "_minus.bigwig", "_positive.bigwig"))
+      reverse <- str_c(
+        x, "-o", str_c(outdir, reverse_file),
+        "--filterRNAstrand", "reverse"
+      )
+      return(reverse)
+    })
+    names(reverse) <- str_c(names(reverse), "_reverse")
+
+    command <- c(forward, reverse)
+  } else {
+    command <- imap(command, ~str_c(., "-o", str_c(outdir, y, ".bigwig"), sep = " "))
+  }
 
   ## Run commands.
   print_message("Creating the BIGWIG coverage tracks.")

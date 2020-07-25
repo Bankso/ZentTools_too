@@ -14,7 +14,9 @@ make_bigwigs(
   min_fragment = NA,
   max_fragment = NA,
   extend_reads = 200,
-  scale_factors = NA
+  scale_factors = NA,
+  split_strands = FALSE,
+  library_type = NA
 )
 }
 \arguments{
@@ -40,6 +42,12 @@ Set to NA to not extend reads.}
 \item{scale_factors}{Takes a named vector, with the name being the sample name,
 and the value being the scale factor.
 If set will override 'normalzie_using' option.}
+
+\item{split_strands}{For RNA-seq, whether to split the strands into
+positive and minus strand files.}
+
+\item{library_type}{If split_strands is TRUE, specify library chemistry
+as either 'dUTP' or 'ligation'.}
 }
 \description{
 Generate Bigwigs
