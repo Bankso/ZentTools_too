@@ -142,7 +142,7 @@ make_bigwigs <- function(
 
     command <- c(forward, reverse)
   } else {
-    command <- imap(command, ~str_c(., "-o", str_c(outdir, y, ".bigwig"), sep = " "))
+    command <- imap(command, ~str_c(.x, "-o", str_c(outdir, .y, ".bigwig"), sep = " "))
   }
 
   ## Run commands.
