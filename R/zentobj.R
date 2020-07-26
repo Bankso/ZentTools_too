@@ -53,14 +53,16 @@ zent_tools <- function(
 
   samples[is.na(samples)] <- NA_character_
 
-  samples[
-    !is.na(control_name),
-    c("control_file_1", "control_file_2", "control_name") := list(
-      ifelse(str_detect(control_file_1, "(^$|^NA$)"), NA_character_, control_file_1),
-      ifelse(str_detect(control_file_2, "(^$|^NA$)"), NA_character_, control_file_2),
-      ifelse(str_detect(control_name, "(^$|^NA$)"), NA_character_, control_name)
-    )
-  ]
+  if (analysis_type %in% c("ChEC-seq", "ChIP-seq")) {
+    samples[
+      !is.na(control_name),
+      c("control_file_1", "control_file_2", "control_name") := list(
+        ifelse(str_detect(control_file_1, "(^$|^NA$)"), NA_character_, control_file_1),
+        ifelse(str_detect(control_file_2, "(^$|^NA$)"), NA_character_, control_file_2),
+        ifelse(str_detect(control_name, "(^$|^NA$)"), NA_character_, control_name)
+      )
+    ]
+  }
     
 
   ## prepare run settings.

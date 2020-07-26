@@ -32,7 +32,7 @@ bowtie2_index <- function(
 
   ## Run the command.
   print_message("Creating the Bowtie2 genome index.")
-  system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
   zent_obj <- set_settings(
@@ -169,14 +169,14 @@ bowtie2_align <- function(
       str_c(outdir, str_c(x, ".sam")),
       sep = " "
     )
-    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
     command <- str_c(
       "samtools", "index",
       str_c(outdir, str_c(x, ".bam")),
       sep = " "
     )
-    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
   })
 
   ## Add settings to zent object.

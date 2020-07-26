@@ -41,7 +41,7 @@ star_index <- function(
 
   ## Run the command.
   print_message("Generating the STAR genome index.")
-  system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Store the genome directory.
   zent_obj <- set_settings(
@@ -114,7 +114,7 @@ star_align <- function(
 
   ## Run the command.
   print_message("Aligning the FASTQ files using STAR.")
-  walk(command, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  walk(command, system)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Index the bam files.
   zent_obj <- add_bams(zent_obj, alignment_dir = outdir)
@@ -122,7 +122,7 @@ star_align <- function(
   print_message("Indexing the aligned BAM files.")
   walk(zent_obj@sample_sheet[["bam_files"]], function(x) {
     command <- str_c("samtools", "index", x, sep = " ")
-    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
   })
 
   ## Add the outdir directory for alignment to the settings.

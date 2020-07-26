@@ -51,7 +51,7 @@ fastqc <- function(
 
   ## Run the fastqc command.
   print_message("Running FASTQ quality control.")
-  system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Return the zent object.
   return(zent_obj)

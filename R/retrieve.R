@@ -47,7 +47,7 @@ retrieve_reads <- function(
 
   ## Run the enaDataGet command.
   print_message("Retrieving the FASTQ files.")
-  walk(command, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  walk(command, system)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Update the sample sheet.
   sample_sheet <- copy(zent_obj@sample_sheet)
@@ -108,7 +108,7 @@ retrieve_reads <- function(
   print_message("Unzipping the FASTQ files.")
   walk(sequences, function(x) {
     command <- str_c("gunzip", str_c(x, ".gz"), sep = " ")
-    system(command, ignore.stdout = TRUE, ignore.stderr = TRUE) 
+    system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE) 
   })
 
   ## Return the zent object.

@@ -70,7 +70,7 @@ call_peaks <- function(
 
   ## Run the commands.
   print_message("Calling peaks from the aligned reads.")
-  walk(commands, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  walk(commands)#, system, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   ## Save the peak directory.
   zent_obj <- set_settings(zent_obj, peak_dir = outdir)
