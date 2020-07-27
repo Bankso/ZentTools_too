@@ -16,7 +16,8 @@ make_bigwigs(
   extend_reads = 200,
   scale_factors = NA,
   split_strands = FALSE,
-  library_type = NA
+  library_type = NA,
+  temp_dir = "./temp"
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ positive and minus strand files.}
 
 \item{library_type}{If split_strands is TRUE, specify library chemistry
 as either 'dUTP' or 'ligation'.}
+
+\item{temp_dir}{Temporary directory to write files to.}
 }
 \description{
 Generate Bigwigs

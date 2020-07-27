@@ -18,7 +18,7 @@
 #'   positive and minus strand files.
 #' @param library_type If split_strands is TRUE, specify library chemistry
 #'   as either 'dUTP' or 'ligation'.
-#'   
+#' @param temp_dir Temporary directory to write files to.  
 #'
 #' @export
 
@@ -34,7 +34,8 @@ make_bigwigs <- function(
   extend_reads = 200,
   scale_factors = NA,
   split_strands = FALSE,
-  library_type = NA
+  library_type = NA,
+  temp_dir = "./temp"
 ) {
 
   ## Input checks.
@@ -121,7 +122,7 @@ make_bigwigs <- function(
   ## Split strands if requested for RNA-seq.
   if (split_strands) {
     forward <- imap(commands, function(x, y) {
-      forward_file <- str_c(y, ifelse(library_type == "dUTP", "_positive.bigwig", "_minus.bigwig"))
+      forward_file <- str_c(y, ifelse(library_type == "dUTP", "_forward.bigwig", "_reverse.bigwig"))
       forward <- str_c(
         x, "-o", str_c(outdir, forward_file),
         "--filterRNAstrand", "forward",
@@ -132,7 +133,7 @@ make_bigwigs <- function(
     names(forward) <- str_c(names(forward), "_forward")
 
     reverse <- imap(commands, function(x, y) {
-      reverse_file <- str_c(y, ifelse(library_type == "dUTP", "_minus.bigwig", "_positive.bigwig"))
+      reverse_file <- str_c(y, ifelse(library_type == "dUTP", "_reverse.bigwig", "_forward.bigwig"))
       reverse <- str_c(
         x, "-o", str_c(outdir, reverse_file),
         "--filterRNAstrand", "reverse",
@@ -146,6 +147,10 @@ make_bigwigs <- function(
   } else {
     commands <- imap(commands, ~str_c(.x, "-o", str_c(outdir, .y, ".bigwig"), sep = " "))
   }
+
+  ## Set temporary directory.
+  if (!dir.exists(temp_dir)) dir.create(temp_dir, recursive = TRUE)
+  Sys.setenv(TMPDIR=temp_dir)
 
   ## Run commands.
   print_message("Creating the BIGWIG coverage tracks.")
