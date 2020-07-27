@@ -4,13 +4,16 @@
 \alias{star_align}
 \title{STAR Alignment}
 \usage{
-star_align(zent_obj, outdir = getwd())
+star_align(zent_obj, outdir = getwd(), bam_sort_ram = NA)
 }
 \arguments{
 \item{zent_obj}{Zent object.}
 
 \item{outdir}{Output directory for aligned reads.
 For use with '--outFileNamePrefix'.}
+
+\item{bam_sort_ram}{How much RAM (in bytes) is available for
+BAM sorting.}
 }
 \description{
 STAR Alignment

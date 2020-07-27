@@ -120,29 +120,31 @@ make_bigwigs <- function(
 
   ## Split strands if requested for RNA-seq.
   if (split_strands) {
-    forward <- imap(command, function(x, y) {
+    forward <- imap(commands, function(x, y) {
       forward_file <- str_c(y, ifelse(library_type == "dUTP", "_positive.bigwig", "_minus.bigwig"))
       forward <- str_c(
         x, "-o", str_c(outdir, forward_file),
-        "--filterRNAstrand", "forward"
+        "--filterRNAstrand", "forward",
+        sep = " "
       )
       return(forward)
     })
     names(forward) <- str_c(names(forward), "_forward")
 
-    reverse <- imap(command, function(x, y) {
+    reverse <- imap(commands, function(x, y) {
       reverse_file <- str_c(y, ifelse(library_type == "dUTP", "_minus.bigwig", "_positive.bigwig"))
       reverse <- str_c(
         x, "-o", str_c(outdir, reverse_file),
-        "--filterRNAstrand", "reverse"
+        "--filterRNAstrand", "reverse",
+        sep = " "
       )
       return(reverse)
     })
     names(reverse) <- str_c(names(reverse), "_reverse")
 
-    command <- c(forward, reverse)
+    commands <- c(forward, reverse)
   } else {
-    command <- imap(command, ~str_c(.x, "-o", str_c(outdir, .y, ".bigwig"), sep = " "))
+    commands <- imap(commands, ~str_c(.x, "-o", str_c(outdir, .y, ".bigwig"), sep = " "))
   }
 
   ## Run commands.

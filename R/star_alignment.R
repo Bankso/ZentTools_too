@@ -62,12 +62,15 @@ star_index <- function(
 #' @param zent_obj Zent object.
 #' @param outdir Output directory for aligned reads.
 #'   For use with '--outFileNamePrefix'.
+#' @param bam_sort_ram How much RAM (in bytes) is available for
+#'   BAM sorting.
 #'
 #' @export
 
 star_align <- function(
   zent_obj,
-  outdir = getwd()
+  outdir = getwd(),
+  bam_sort_ram = NA
 ) {
 
   ## Input check and getting settings.
@@ -109,6 +112,11 @@ star_align <- function(
       "--readFilesIn", x,
       sep = " "
     )
+
+    if (!is.na(bam_sort_ram)) {
+      command <- str_c(command, "--limitBAMsortRAM", bam_sort_ram, sep = " ")
+    }
+
     return(command)
   })
 
