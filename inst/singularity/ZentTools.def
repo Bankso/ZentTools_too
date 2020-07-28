@@ -17,7 +17,7 @@ conda update -n base -y -c defaults conda
 conda create -n ZentTools -y -c conda-forge -c bioconda \
 r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
-bioconductor-chipseeker \
+bioconductor-chipseeker bioconductor-rsamtools \
 fastqc star samtools enabrowsertools \
 bowtie2 deeptools bedtools macs2
 
@@ -31,12 +31,12 @@ conda clean -y --all
 
 ## Install ZentTools.
 
+export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
+
 apt-get -y update
 apt-get -y install build-essential
 
-export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
-
-R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools',ref='dev')"
+R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools',ref='develop')"
 
 %environment
 
