@@ -4,7 +4,7 @@
 \alias{star_align}
 \title{STAR Alignment}
 \usage{
-star_align(zent_obj, outdir = getwd(), bam_sort_ram = NA)
+star_align(zent_obj, outdir = getwd(), max_bam_sort_ram = "1G")
 }
 \arguments{
 \item{zent_obj}{Zent object.}
@@ -12,8 +12,8 @@ star_align(zent_obj, outdir = getwd(), bam_sort_ram = NA)
 \item{outdir}{Output directory for aligned reads.
 For use with '--outFileNamePrefix'.}
 
-\item{bam_sort_ram}{How much RAM (in bytes) is available for
-BAM sorting.}
+\item{max_bam_sort_ram}{Maximum ammount of RAM per threads
+available for BAM sorting.}
 }
 \description{
 STAR Alignment

@@ -21,9 +21,7 @@ add_bams <- function(
   ## Add BAMs if RNA-seq experiment.
   if (analysis_type == "RNA-seq") {
     sample_sheet[, bam_files := str_c(
-      alignment_dir,
-      sample_name,
-      "_Aligned.sortedByCoord.out.bam"
+      alignment_dir, sample_name, "_sorted.bam"
     )]
   } else if (analysis_type %in% c("ChIP-seq", "ChEC-seq")) {
     sample_sheet[,

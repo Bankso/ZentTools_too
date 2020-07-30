@@ -62,15 +62,15 @@ star_index <- function(
 #' @param zent_obj Zent object.
 #' @param outdir Output directory for aligned reads.
 #'   For use with '--outFileNamePrefix'.
-#' @param bam_sort_ram How much RAM (in bytes) is available for
-#'   BAM sorting.
+#' @param max_bam_sort_ram Maximum ammount of RAM per threads
+#'   available for BAM sorting.
 #'
 #' @export
 
 star_align <- function(
   zent_obj,
   outdir = getwd(),
-  bam_sort_ram = NA
+  max_bam_sort_ram = "1G"
 ) {
 
   ## Input check and getting settings.
@@ -101,7 +101,7 @@ star_align <- function(
     "STAR",
     "--runThreadN", pull_setting(zent_obj, "ncores"),
     "--genomeDir", pull_setting(zent_obj, "genome_dir"),
-    "--outSAMtype", "BAM SortedByCoordinate",
+    "--outSAMtype", "Unsorted",
     sep = " "
   )
 
@@ -113,10 +113,6 @@ star_align <- function(
       sep = " "
     )
 
-    if (!is.na(bam_sort_ram)) {
-      command <- str_c(command, "--limitBAMsortRAM", bam_sort_ram, sep = " ")
-    }
-
     return(command)
   })
 
@@ -124,14 +120,32 @@ star_align <- function(
   print_message("Aligning the FASTQ files using STAR.")
   walk(command, system)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
-  ## Index the bam files.
-  zent_obj <- add_bams(zent_obj, alignment_dir = outdir)
+  ## Sort and index the BAM files.
+  unsorted_bams <- str_c(
+    alignment_dir,
+    zent_obj@sample_sheet[["sample_name"]],
+    "_Aligned.out.bam"
+  )
+  names(unsorted_bams) <- zent_obj@sample_sheet[["sample_name"]]
 
-  print_message("Indexing the aligned BAM files.")
-  walk(zent_obj@sample_sheet[["bam_files"]], function(x) {
-    command <- str_c("samtools", "index", x, sep = " ")
-    system(command)#, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  iwalk(unsorted_bams, function(x, y) {
+    command <- str_c(
+      "samtools", "sort",
+      "-m", max_bam_sort_ram,
+      "-@", pull_setting(zent_obj, "ncores"),
+      "-o", str_c(outdir, str_c(y, "_sorted.bam")),
+      "-O", "BAM",
+      x,
+      sep = " "
+    )
+    system(command)
+
+    command <- str_c("samtools", "index", str_c(y, "_sorted.bam"))
+    system(command)
   })
+
+  ## Add the bam files to the sample sheet.
+  zent_obj <- add_bams(zent_obj, alignment_dir = outdir)
 
   ## Add the outdir directory for alignment to the settings.
   zent_obj <- set_settings(zent_obj, alignment_dir = outdir)
