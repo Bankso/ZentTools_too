@@ -101,7 +101,7 @@ star_align <- function(
     "STAR",
     "--runThreadN", pull_setting(zent_obj, "ncores"),
     "--genomeDir", pull_setting(zent_obj, "genome_dir"),
-    "--outSAMtype", "Unsorted",
+    "--outSAMtype", "BAM Unsorted",
     sep = " "
   )
 
@@ -122,7 +122,7 @@ star_align <- function(
 
   ## Sort and index the BAM files.
   unsorted_bams <- str_c(
-    alignment_dir,
+    outdir,
     zent_obj@sample_sheet[["sample_name"]],
     "_Aligned.out.bam"
   )
@@ -140,7 +140,10 @@ star_align <- function(
     )
     system(command)
 
-    command <- str_c("samtools", "index", str_c(y, "_sorted.bam"))
+    command <- str_c(
+      "samtools", "index", str_c(outdir, y, "_sorted.bam"),
+      sep = " "
+    )
     system(command)
   })
 

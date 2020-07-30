@@ -18,8 +18,8 @@ conda create -n ZentTools -y -c conda-forge -c bioconda \
 r-base r-devtools r-tidyverse r-data.table r-ggpubr \
 bioconductor-edger bioconductor-deseq2 bioconductor-rsubread \
 bioconductor-chipseeker bioconductor-rsamtools \
-fastqc star samtools enabrowsertools \
-bowtie2 deeptools bedtools macs2
+fastqc star samtools bowtie2 deeptools bedtools macs2 \
+requests
 
 ## Update environment.
 
@@ -38,6 +38,10 @@ apt-get -y install build-essential zlib1g-dev
 
 R --slave -e "Sys.setenv(TAR='/bin/tar'); devtools::install_github('rpolicastro/ZentTools',ref='develop',upgrade='never')"
 
+## install updated version of enaDataGet.
+
+git clone https://github.com/rpolicastro/enaBrowserTools.git
+
 %environment
 
-export PATH=/opt/conda/envs/ZentTools/bin/:$PATH
+export PATH=/enaBrowserTools/python3/:/opt/conda/envs/ZentTools/bin/:$PATH
