@@ -47,8 +47,8 @@ cd ..
 Once the assembly and annotation have been obtained, the Singularity container can be downloaded and the internal R version started.
 
 ```
-singularity pull --arch amd64 library://zentlab/default/zent_tools:software_v0.2
-singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.2.sif R
+singularity pull --arch amd64 library://zentlab/default/zent_tools:software_v0.4
+singularity exec -eCB `pwd` -H `pwd` zent_tools_software_v0.4.sif R
 ```
 
 ### Creating the ZentTools Object
