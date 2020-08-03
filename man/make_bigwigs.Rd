@@ -15,6 +15,7 @@ make_bigwigs(
   max_fragment = NA,
   extend_reads = 200,
   scale_factors = NA,
+  smooth_length = NA,
   split_strands = FALSE,
   library_type = NA,
   temp_dir = "./temp"
@@ -43,6 +44,9 @@ Set to NA to not extend reads.}
 \item{scale_factors}{Takes a named vector, with the name being the sample name,
 and the value being the scale factor.
 If set will override 'normalzie_using' option.}
+
+\item{smooth_length}{The length in which to average the reads.
+This value should be greater than the bin size.}
 
 \item{split_strands}{For RNA-seq, whether to split the strands into
 positive and minus strand files.}

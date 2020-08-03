@@ -14,6 +14,8 @@
 #' @param scale_factors Takes a named vector, with the name being the sample name,
 #'   and the value being the scale factor.
 #'   If set will override 'normalzie_using' option.
+#' @param smooth_length The length in which to average the reads.
+#'   This value should be greater than the bin size.
 #' @param split_strands For RNA-seq, whether to split the strands into
 #'   positive and minus strand files.
 #' @param library_type If split_strands is TRUE, specify library chemistry
@@ -33,6 +35,7 @@ make_bigwigs <- function(
   max_fragment = NA,
   extend_reads = 200,
   scale_factors = NA,
+  smooth_length = NA,
   split_strands = FALSE,
   library_type = NA,
   temp_dir = "./temp"
@@ -108,6 +111,11 @@ make_bigwigs <- function(
     }
     if (!is.na(max_fragment)) {
       command <- str_c(command, "--maxFragmentLength", max_fragment, sep = " ")
+    }
+
+    if (!is.na(smooth_length)) {
+      if (smooth_length <= bin_size) stop("smooth_length must be greater than bin_size")
+      command <- str_c(command, "--smoothLength", smooth_length, sep = " ")
     }
 
     if (!is.na(extend_reads) && paired_status) {
