@@ -4,7 +4,8 @@
 #' @param outdir Output directory for STAR genome index.
 #' @param genome_assembly Path to genome fasta file.
 #' @param genome_annotation Path to genome gtf file.
-#' @param sa_bases Number of suffix array bases (--genomeSAindexNbases)
+#' @param sa_bases Number of suffix array base.
+#' @param ram_limit Upper memory limit for genome generate.
 #'
 #' @export
 
@@ -13,7 +14,8 @@ star_index <- function(
   outdir = getwd(),
   genome_assembly,
   genome_annotation,
-  sa_bases = NA
+  sa_bases = NA,
+  ram_limit = NA
 ) {
 
   ## Make sure output directory exists.
@@ -36,6 +38,13 @@ star_index <- function(
       "--genomeSAindexNbases",
       sa_bases,
       sep = " "
+    )
+  }
+
+  if (!is.na(ram_limit)) {
+    command <- str_c(
+      command, "--limitGenomeGenerateRAM",
+      ram_limit, sep=" "
     )
   }
 

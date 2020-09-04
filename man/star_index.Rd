@@ -9,7 +9,8 @@ star_index(
   outdir = getwd(),
   genome_assembly,
   genome_annotation,
-  sa_bases = NA
+  sa_bases = NA,
+  ram_limit = NA
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ star_index(
 
 \item{genome_annotation}{Path to genome gtf file.}
 
-\item{sa_bases}{Number of suffix array bases (--genomeSAindexNbases)}
+\item{sa_bases}{Number of suffix array base.}
+
+\item{ram_limit}{Upper memory limit for genome generate.}
 }
 \description{
 STAR Genome Generation
