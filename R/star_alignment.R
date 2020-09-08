@@ -44,7 +44,8 @@ star_index <- function(
   if (!is.na(ram_limit)) {
     command <- str_c(
       command, "--limitGenomeGenerateRAM",
-      ram_limit, sep=" "
+      format(ram_limit, scientific=FALSE),
+      sep=" "
     )
   }
 
