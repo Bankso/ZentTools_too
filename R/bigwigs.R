@@ -83,6 +83,7 @@ make_bigwigs <- function(
       "-b", x,
       "-of", "bigwig",
       "-bs", bin_size,
+	  "--extendReads", extend_reads,
       "-p", pull_setting(zent_obj, "ncores"),
       sep = " "
     )
